@@ -8,7 +8,6 @@ class Project(Base):
     projectId = Column(Integer, primary_key=True, index=True)
     name = Column(String, nullable=False)
 
-
 class ProjectOwner(Base):
     __tablename__ = "project_owners"
 
