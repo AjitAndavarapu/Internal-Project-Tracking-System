@@ -10,7 +10,7 @@ class Project(Base):
 
 class ProjectOwner(Base):
     __tablename__ = "project_owners"
-
+    
     projectId = Column(Integer, ForeignKey("projects.projectId"), primary_key=True)
     userId = Column(Integer, ForeignKey("users.userId"), primary_key=True)
     createdAt = Column(DateTime(timezone=True), server_default=func.now())

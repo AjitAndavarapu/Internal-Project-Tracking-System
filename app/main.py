@@ -3,7 +3,7 @@ from app.routers import auth, projects, tasks, assignees, task_logs, users, time
 
 app = FastAPI(title="Project Tracking System")
 
-@app.get("/")
+@app.get("/", tags=["greet"])
 def greet():
     return {"Welcome to internal project tracking system"}
 
