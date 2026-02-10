@@ -1,5 +1,5 @@
 from fastapi import FastAPI
-from app.routers import auth, projects, tasks, assignees, task_logs, users, time_entries
+from backend.routers import auth, projects, tasks, assignees, task_logs, users, time_entries
 from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Project Tracking System")

@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from app.core.enums import Role
+from backend.core.enums import Role
 from datetime import datetime
 
 class UserOut(BaseModel):
