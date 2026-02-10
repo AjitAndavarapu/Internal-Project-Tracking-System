@@ -1,7 +1,16 @@
 from fastapi import FastAPI
 from app.routers import auth, projects, tasks, assignees, task_logs, users, time_entries
+from fastapi.middleware.cors import CORSMiddleware
 
 app = FastAPI(title="Project Tracking System")
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:3000", "https://your-frontend-domain.com"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.get("/", tags=["greet"])
 def greet():
