@@ -7,6 +7,7 @@ from app.models.assignee import Assignee
 from app.models.project import ProjectOwner
 from app.models.task import Task
 from app.models.task_log import TaskLog
+from app.models.user import User
 
 router = APIRouter(tags=["Assignees"])
 
@@ -75,3 +76,32 @@ def unassign_user(
 
     db.commit()
     return {"message": "User unassigned"}
+
+@router.get("/projects/{project_id}/assignees")
+def get_project_assignees(
+    project_id: int,
+    db: Session = Depends(get_db),
+    user=Depends(get_current_user),
+):
+    assignees = (
+        db.query(User)
+        .join(Assignee, Assignee.userId == User.userId)
+        .filter(Assignee.taskId == project_id)  # ✅ fixed capitalization
+        .all()
+    )
+
+    return assignees
+
+@router.get("/users/my/assigned-tasks")
+def get_user_assigned_tasks(
+    db: Session = Depends(get_db),
+    user=Depends(get_current_user),
+):
+    tasks = (
+        db.query(Task)
+        .join(Assignee, Assignee.taskId == Task.taskId)
+        .filter(Assignee.userId == user.userId)
+        .all()
+    )
+
+    return tasks

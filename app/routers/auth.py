@@ -9,7 +9,7 @@ from app.core.security import (
     create_access_token,
 )
 from app.models.user import User
-from app.schemas.auth import UserCreate, Token
+from app.schemas.auth import UserCreate, Token, UserLogIn
 
 router = APIRouter(tags=["Auth"])
 
@@ -36,12 +36,31 @@ def register(user_data: UserCreate, db: Session = Depends(get_db)):
     return {"access_token": token}
 
 
+# @router.post("/auth/login", response_model=Token)
+# def login(
+#     form_data: OAuth2PasswordRequestForm = Depends(),
+#     db: Session = Depends(get_db),
+# ):
+#     user = db.query(User).filter(User.email == form_data.username).first()
+
+#     if not user or not verify_password(form_data.password, user.password_hash):
+#         raise HTTPException(status_code=401, detail="Invalid credentials")
+
+#     # token = create_access_token({"sub": user.userId})
+#     token = create_access_token({"sub": str(user.userId)})
+
+#     return {"access_token": token}
+
+
+
+
+
 @router.post("/auth/login", response_model=Token)
 def login(
-    form_data: OAuth2PasswordRequestForm = Depends(),
+    form_data: UserLogIn,
     db: Session = Depends(get_db),
 ):
-    user = db.query(User).filter(User.email == form_data.username).first()
+    user = db.query(User).filter(User.email == form_data.email).first()
 
     if not user or not verify_password(form_data.password, user.password_hash):
         raise HTTPException(status_code=401, detail="Invalid credentials")
@@ -50,3 +69,6 @@ def login(
     token = create_access_token({"sub": str(user.userId)})
 
     return {"access_token": token}
+
+
+

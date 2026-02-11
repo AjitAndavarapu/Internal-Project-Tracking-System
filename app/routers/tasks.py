@@ -77,3 +77,26 @@ def update_task_status(
     db.commit()
 
     return {"message": "Status updated"}
+
+#added
+@router.get("/projects/{project_id}/tasks", response_model=list[TaskOut])
+def get_tasks_by_project(
+    project_id: int,
+    db: Session = Depends(get_db),
+    user=Depends(get_current_user),
+):
+    # Optional: access check (owner or admin)
+    is_owner = (
+        db.query(ProjectOwner)
+        .filter(
+            ProjectOwner.projectId == project_id,
+            ProjectOwner.userId == user.userId,
+        )
+        .first()
+    )
+
+    if not is_owner and user.role != "admin":
+        raise HTTPException(403, "Not authorized")
+
+    tasks = db.query(Task).filter(Task.projectId == project_id).all()
+    return tasks
